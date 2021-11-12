@@ -1,0 +1,332 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01SNQZ28N81OA7AwTTP52l2G9k5lPwEp3ak",
+    "name": "FMC Intelligence Update",
+    "title": "FMC Intelligence Update",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "https://private.intel.amp.cisco.com/ctia/feed/feed-da2c25d6-473b-4cca-ac7e-6be66f59063e/view.txt?s=1f2199e1-044d-4638-8ab0-9798cbe5188e",
+          "scope": "local",
+          "name": "IP Feed",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SNRCN330PO72m3ewsqw9O8hcprRgKWynv",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "observable_value",
+          "type": "datatype.string",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SNQZZNMLCGO3ySewxroywCPGFDHmkiSDF",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "observable_type",
+          "type": "datatype.string",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SNQZS7ULO2R25TuODu02WydNHanxWBzdJ",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "https://private.intel.amp.cisco.com/ctia/feed/feed-62f5e50f-eac4-46c5-a3a8-0f76ce3e7d6c/view.txt?s=5e813ae0-e93c-4390-bec0-6bb31b63bde2",
+          "scope": "local",
+          "name": "Domain Feed",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01SNRCZLGPAKQ6BET6PTlzJTrZfSouUZquz",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "display_name": "FMC Intelligence Update",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "no_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01SNQZII8JN3R2dChHWz74YKyOTgGHDDtS4",
+        "name": "Threat Response - Generate Access Token",
+        "title": "Threat Response - Generate Access Token",
+        "type": "workflow.atomic_workflow",
+        "base_type": "subworkflow",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Threat Response - Generate Access Token",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01K5COTP8CXMN0JVKBa9RTBZek66BtyqWfh",
+            "target_type": "web-service.endpoint"
+          },
+          "workflow_id": "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH"
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SNR45FYC8CO1MMDioMYIZeTsr0ao3zmIX",
+        "name": "HTTP Request",
+        "title": "Post SecureX Private Intelligence Judgement",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "accept": "applicaton/json",
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "body": "{\"confidence\":\"High\",\"disposition\":2,\"priority\":100,\"severity\":\"High\",\"source\":\"ATS Pivot Menu\",\"tlp\":\"amber\",\"type\":\"judgement\",\"observable\":{\"type\":\"$workflow.definition_workflow_01SNQZ28N81OA7AwTTP52l2G9k5lPwEp3ak.input.variable_workflow_01SNQZS7ULO2R25TuODu02WydNHanxWBzdJ$\",\"value\":\"$workflow.definition_workflow_01SNQZ28N81OA7AwTTP52l2G9k5lPwEp3ak.input.variable_workflow_01SNQZZNMLCGO3ySewxroywCPGFDHmkiSDF$\"},\"reason\":\"\",\"valid_time\":{\"start_time\":\"2021-11-08T21:20:46.979Z\",\"end_time\":\"2021-12-08T21:20:46.979Z\"}}",
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $activity.definition_activity_01SNQZII8JN3R2dChHWz74YKyOTgGHDDtS4.output.variable_workflow_01PP75S3G7CJY6WAQr2IJC7qga2SIoE09gQ$"
+            }
+          ],
+          "display_name": "Post SecureX Private Intelligence Judgement",
+          "method": "POST",
+          "relative_url": "/ctia/judgement",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01K5COU2P4BJ93qEsN20qTZ7JxYaSsM3m36"
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SNR8M237C2V6zvd377WSlhjTHeLwDTBVD",
+        "name": "JSONPath Query",
+        "title": "JSONPath Query",
+        "type": "corejava.jsonpathquery",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "JSONPath Query",
+          "input_json": "$activity.definition_activity_01SNR45FYC8CO1MMDioMYIZeTsr0ao3zmIX.output.response_body$",
+          "jsonpath_queries": [
+            {
+              "jsonpath_query": "$.id",
+              "jsonpath_query_name": "judgement_id",
+              "jsonpath_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01SNRD5IQ7JG63vS2fkkiU6yFMceo4dvV7L",
+        "name": "Condition Block",
+        "title": "If Observable Type Is",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "If Observable Type Is",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01SNRD5J52VBG37k4MTGPTvfu4kBXoafMuo",
+            "name": "Condition Branch",
+            "title": "IP",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$workflow.definition_workflow_01SNQZ28N81OA7AwTTP52l2G9k5lPwEp3ak.input.variable_workflow_01SNQZS7ULO2R25TuODu02WydNHanxWBzdJ$",
+                "operator": "eq",
+                "right_operand": "ip"
+              },
+              "continue_on_failure": false,
+              "display_name": "IP",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01SNR7JD334F75MaSaaVtKmb1CPDAjph851",
+                "name": "HTTP Request",
+                "title": "Update SecureX Private Intelligence Indicator",
+                "type": "web-service.http_request",
+                "base_type": "activity",
+                "properties": {
+                  "action_timeout": 180,
+                  "allow_auto_redirect": true,
+                  "body": "{\"source_ref\":\"$activity.definition_activity_01SNR8M237C2V6zvd377WSlhjTHeLwDTBVD.output.jsonpath_queries.judgement_id$\",\"target_ref\":\"$workflow.definition_workflow_01SNQZ28N81OA7AwTTP52l2G9k5lPwEp3ak.local.variable_workflow_01SNRCN330PO72m3ewsqw9O8hcprRgKWynv$\",\"type\":\"relationship\",\"relationship_type\":\"element-of\"}",
+                  "continue_on_error_status_code": false,
+                  "continue_on_failure": false,
+                  "display_name": "Update SecureX Private Intelligence Indicator",
+                  "method": "GET",
+                  "runtime_user": {
+                    "target_default": true
+                  },
+                  "skip_execution": false,
+                  "target": {
+                    "override_workflow_target": true,
+                    "target_id": "definition_target_01K5COU2P4BJ93qEsN20qTZ7JxYaSsM3m36"
+                  }
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          },
+          {
+            "unique_name": "definition_activity_01SNRD5JD9PL67IC4whoZ8gJExJK8qz5d81",
+            "name": "Condition Branch",
+            "title": "Domain",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$workflow.definition_workflow_01SNQZ28N81OA7AwTTP52l2G9k5lPwEp3ak.input.variable_workflow_01SNQZS7ULO2R25TuODu02WydNHanxWBzdJ$",
+                "operator": "eq",
+                "right_operand": "domain"
+              },
+              "continue_on_failure": false,
+              "display_name": "Domain",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01SNRDR8K5Y6V4F0aqwEr2wC3PR7d0WE7S4",
+                "name": "HTTP Request",
+                "title": "Update SecureX Private Intelligence Indicator",
+                "type": "web-service.http_request",
+                "base_type": "activity",
+                "properties": {
+                  "action_timeout": 180,
+                  "allow_auto_redirect": true,
+                  "body": "{\"source_ref\":\"$activity.definition_activity_01SNR8M237C2V6zvd377WSlhjTHeLwDTBVD.output.jsonpath_queries.judgement_id$\",\"target_ref\":\"$workflow.definition_workflow_01SNQZ28N81OA7AwTTP52l2G9k5lPwEp3ak.local.variable_workflow_01SNRCZLGPAKQ6BET6PTlzJTrZfSouUZquz$\",\"type\":\"relationship\",\"relationship_type\":\"element-of\"}",
+                  "continue_on_error_status_code": false,
+                  "continue_on_failure": false,
+                  "display_name": "Update SecureX Private Intelligence Indicator",
+                  "method": "GET",
+                  "runtime_user": {
+                    "target_default": true
+                  },
+                  "skip_execution": false,
+                  "target": {
+                    "override_workflow_target": true,
+                    "target_id": "definition_target_01K5COU2P4BJ93qEsN20qTZ7JxYaSsM3m36"
+                  }
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m"
+    ]
+  },
+  "categories": {
+    "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m": {
+      "unique_name": "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m",
+      "name": "response",
+      "title": "response",
+      "type": "basic.category",
+      "base_type": "category",
+      "category_type": "custom",
+      "object_type": "category"
+    }
+  },
+  "targets": {
+    "definition_target_01K5COTP8CXMN0JVKBa9RTBZek66BtyqWfh": {
+      "unique_name": "definition_target_01K5COTP8CXMN0JVKBa9RTBZek66BtyqWfh",
+      "name": "CTR Target for access token",
+      "title": "CTR Target for access token",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "default_runtime_user_id": "definition_runtime_user_01G9UGCFYZ7CN0OelN4pKwTDtjDeg7X9IHE",
+        "description": "CTR_For_Access_Token",
+        "disable_certificate_validation": false,
+        "display_name": "CTR Target for access token",
+        "host": "visibility.amp.cisco.com",
+        "no_runtime_user": false,
+        "path": "/iroh",
+        "protocol": "https"
+      }
+    },
+    "definition_target_01K5COU2P4BJ93qEsN20qTZ7JxYaSsM3m36": {
+      "unique_name": "definition_target_01K5COU2P4BJ93qEsN20qTZ7JxYaSsM3m36",
+      "name": "Private_CTIA_Target",
+      "title": "Private_CTIA_Target",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "description": "Private_CTIA_Target",
+        "disable_certificate_validation": false,
+        "display_name": "Private_CTIA_Target",
+        "host": "private.intel.amp.cisco.com",
+        "no_runtime_user": true,
+        "protocol": "https"
+      }
+    }
+  },
+  "runtime_users": {
+    "definition_runtime_user_01G9UGCFYZ7CN0OelN4pKwTDtjDeg7X9IHE": {
+      "unique_name": "definition_runtime_user_01G9UGCFYZ7CN0OelN4pKwTDtjDeg7X9IHE",
+      "name": "CTR_Credentials",
+      "title": "CTR_Credentials",
+      "description": "Account Key for CTR",
+      "type": "runtime_user.web-service_basic_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "auth_option": "*****",
+        "basic_password": "*****",
+        "basic_username": "*****",
+        "display_name": "CTR_Credentials"
+      }
+    }
+  },
+  "atomic_workflows": [
+    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH"
+  ]
+}
